@@ -1,9 +1,9 @@
 {
     "type": "MESSAGE",
-    "eventTime": "2019-02-05T17:42:45.449055Z",
+    "eventTime": "2019-02-05T18:01:08.261055Z",
     "token": "hkw_4t1M3HZotBpoVby2GNdO50bx7hyuWjLM5eC4CQE=",
     "message": {
-        "name": "spaces/7OyQ3AAAAAE/messages/bqo78Qr5t7w.bqo78Qr5t7w",
+        "name": "spaces/7OyQ3AAAAAE/messages/TH7XH2fo6HQ.TH7XH2fo6HQ",
         "sender": {
             "name": "users/103615382227833440448",
             "displayName": "Shantanu Srivastava",
@@ -11,10 +11,10 @@
             "email": "shantanu.srivastava@neuraflash.com",
             "type": "HUMAN"
         },
-        "createTime": "2019-02-05T17:42:45.449055Z",
-        "text": "hell",
+        "createTime": "2019-02-05T18:01:08.261055Z",
+        "text": "yo",
         "thread": {
-            "name": "spaces/7OyQ3AAAAAE/threads/bqo78Qr5t7w",
+            "name": "spaces/7OyQ3AAAAAE/threads/TH7XH2fo6HQ",
             "retentionSettings": {
                 "state": "PERMANENT"
             }
@@ -23,7 +23,7 @@
             "name": "spaces/7OyQ3AAAAAE",
             "type": "DM"
         },
-        "argumentText": "hell"
+        "argumentText": "yo"
     },
     "user": {
         "name": "users/103615382227833440448",
@@ -36,5 +36,5 @@
         "name": "spaces/7OyQ3AAAAAE",
         "type": "DM"
     },
-    "configCompleteRedirectUrl": "https://chat.google.com/api/bot_config_complete?token=AHKiO__a1jqYrCslWyXuSDvneRGYZIzr5DV8BX1pKOKBxDKVyp1HBdQ4Enie0ad1oTOptjR6oACOjl-vfakUtx1WDxRYYkeHr0DoJtkruvLUUadtiT182i-bhqi4AcCwShDd9SQcft6dOYrE1VFM"
+    "configCompleteRedirectUrl": "https://chat.google.com/api/bot_config_complete?token=AHKiO_9lD-KE7Bgw7Lsyqv-DrVBuNRLbPOGHaQBUrR8Ox_xFgm30onCtpkouYHT8ztiPvqywlFYHXBmQD5yRZfc0ioLZ3RCQSOj4u6c1Yipp0vxLS3BtNFd8n7nQzkCqgbW-Wv39jwKRKBDk8o1s"
 }
