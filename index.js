@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post("/answerme", function (req, res) {
     console.log('>> Post > request body : ' + JSON.stringify(req.body));
     res.setHeader('Content-Type', 'application/json');
-    res.send( handleIncoming(req.body));
+    res.send(handleIncoming.getTime(req.body));
 });
 
 app.get("/", function (req, res) {
