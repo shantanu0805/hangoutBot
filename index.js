@@ -10,7 +10,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post("/", function (req, res) {
-    console.log('>> request body : ' + JSON.stringify(req.body));
+    console.log('>> Post > request body : ' + JSON.stringify(req.body));
+});
+
+app.get("/", function (req, res) {
+    console.log('>> Get > request body : ' + JSON.stringify(req.body));
 });
 
 http.listen(process.env.PORT || 8080, function () {
