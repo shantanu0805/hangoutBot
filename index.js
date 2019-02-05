@@ -7,7 +7,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post("/", function (req, res) {
+app.post("/answerme", function (req, res) {
     console.log('>> Post > request body : ' + JSON.stringify(req.body));
 });
 

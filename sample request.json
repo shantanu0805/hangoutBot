@@ -1,0 +1,40 @@
+{
+    "type": "MESSAGE",
+    "eventTime": "2019-02-05T17:42:45.449055Z",
+    "token": "hkw_4t1M3HZotBpoVby2GNdO50bx7hyuWjLM5eC4CQE=",
+    "message": {
+        "name": "spaces/7OyQ3AAAAAE/messages/bqo78Qr5t7w.bqo78Qr5t7w",
+        "sender": {
+            "name": "users/103615382227833440448",
+            "displayName": "Shantanu Srivastava",
+            "avatarUrl": "https://lh6.googleusercontent.com/-FTZMiU6ZA18/AAAAAAAAAAI/AAAAAAAAACE/E0fyFS6rpkA/photo.jpg",
+            "email": "shantanu.srivastava@neuraflash.com",
+            "type": "HUMAN"
+        },
+        "createTime": "2019-02-05T17:42:45.449055Z",
+        "text": "hell",
+        "thread": {
+            "name": "spaces/7OyQ3AAAAAE/threads/bqo78Qr5t7w",
+            "retentionSettings": {
+                "state": "PERMANENT"
+            }
+        },
+        "space": {
+            "name": "spaces/7OyQ3AAAAAE",
+            "type": "DM"
+        },
+        "argumentText": "hell"
+    },
+    "user": {
+        "name": "users/103615382227833440448",
+        "displayName": "Shantanu Srivastava",
+        "avatarUrl": "https://lh6.googleusercontent.com/-FTZMiU6ZA18/AAAAAAAAAAI/AAAAAAAAACE/E0fyFS6rpkA/photo.jpg",
+        "email": "shantanu.srivastava@neuraflash.com",
+        "type": "HUMAN"
+    },
+    "space": {
+        "name": "spaces/7OyQ3AAAAAE",
+        "type": "DM"
+    },
+    "configCompleteRedirectUrl": "https://chat.google.com/api/bot_config_complete?token=AHKiO__a1jqYrCslWyXuSDvneRGYZIzr5DV8BX1pKOKBxDKVyp1HBdQ4Enie0ad1oTOptjR6oACOjl-vfakUtx1WDxRYYkeHr0DoJtkruvLUUadtiT182i-bhqi4AcCwShDd9SQcft6dOYrE1VFM"
+}
