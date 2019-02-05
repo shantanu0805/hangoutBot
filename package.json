@@ -1,0 +1,22 @@
+{
+  "name": "hangout-bot",
+  "version": "1.0.0",
+  "description": "Hangout World Time Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shantanu0805/hangoutBot.git"
+  },
+  "keywords": [
+    "hangout"
+  ],
+  "author": "Shantanu (shantanu0805@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shantanu0805/hangoutBot/issues"
+  },
+  "homepage": "https://github.com/shantanu0805/hangoutBot#readme"
+}
