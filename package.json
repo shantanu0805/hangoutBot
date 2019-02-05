@@ -18,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/shantanu0805/hangoutBot/issues"
   },
-  "homepage": "https://github.com/shantanu0805/hangoutBot#readme"
+  "homepage": "https://github.com/shantanu0805/hangoutBot#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "request": "^2.88.0"
+  }
 }
