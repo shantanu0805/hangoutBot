@@ -7,7 +7,7 @@ handleIncoming.timeZones = {
 
 handleIncoming.getTime = function(requestBody){
 
-    console.log('>> Get > request body : ' + JSON.stringify(req.body));
+    console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
     var optionsIndia = {
         timeZone: handleIncoming.timeZones.India,
         year: 'numeric', month: 'numeric', day: 'numeric',
