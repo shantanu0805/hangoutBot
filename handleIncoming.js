@@ -1,4 +1,5 @@
 var handleIncoming = {};
+var moment = require('moment-timezone');
 
 handleIncoming.timeZones = {
     'India' : 'Asia/Colombo',
@@ -8,6 +9,7 @@ handleIncoming.timeZones = {
 handleIncoming.getTime = function(requestBody){
 
     console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
+    console.log('>> Timezone Guess: ' + moment.tz.guess());
     var optionsIndia = {
         timeZone: handleIncoming.timeZones.India,
         year: 'numeric', month: 'numeric', day: 'numeric',

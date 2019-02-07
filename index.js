@@ -2,7 +2,6 @@ var bodyParser = require("body-parser");
 var express = require('express');
 var app = express();
 var path = require('path');
-//var botLogo = require(path.join(__dirname + '/assets/worldClock.jpeg'));
 
 var handleIncoming = require(path.join(__dirname + '/handleIncoming.js'));
 
@@ -16,10 +15,9 @@ app.post("/answerme", function (req, res) {
 });
 
 app.get("/botLogo", function (req, res) {
-
-    //res.sendFile(botLogo);
     res.sendFile(__dirname + '/assets/worldClock.jpeg');
 });
+
 app.get("/", function (req, res) {
 
     console.log('>> Get > request body : ' + JSON.stringify(req.body));
@@ -40,6 +38,8 @@ app.get("/", function (req, res) {
     formatter = new Intl.DateTimeFormat([], options2)
     var currentTimeNY = formatter.format(new Date());
     console.log('>> currentTime NY : ' + currentTimeNY);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(currentTime);
 });
 
 app.listen(process.env.PORT || 8080, function(){
