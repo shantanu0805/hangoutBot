@@ -31,10 +31,10 @@ handleIncoming.getTime = function(requestBody){
     var string = requestBody.message.text.toLowerCase();
     expr = /ind/;  
     if(expr.test(string)){
-        returnObj.text = 'Current Time in India is  : ' + currentTimeIndia;
+        returnObj.text = 'Current Time in *India* is  : *' + currentTimeIndia + '*';
     }
     else{
-        returnObj.text = 'Current Time in US is  : ' + currentTimeNY;
+        returnObj.text = 'Current Time in *US* is  : *' + currentTimeNY + '*';
     }
     console.log('>> return response : ' + returnObj);
     return returnObj;
