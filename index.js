@@ -2,6 +2,8 @@ var bodyParser = require("body-parser");
 var express = require('express');
 var app = express();
 var path = require('path');
+var moment = require('moment');
+var momentTz = require('moment-timezone');
 
 var handleIncoming = require(path.join(__dirname + '/handleIncoming.js'));
 
@@ -15,8 +17,22 @@ app.post("/answerme", function (req, res) {
 });
 
 app.get("/botLogo", function (req, res) {
+    console.log('>> handleIncoming > response: ' + JSON.stringify(handleIncoming.getTime(req.body)));
     res.sendFile(__dirname + '/assets/worldClock.jpeg');
 });
+
+function getTimeString(numb){
+
+    if(numb.length == 1)
+        return '0' + numb[0].toString() + ':00:00Z';
+    if(numb.length == 2)
+        return numb[0].toString() + numb[1].toString() + ':00:00Z';
+    if(numb.length == 3)
+        return numb[0].toString() + numb[1].toString() + ':0' + numb[2].toString() + ':00Z';
+    if(numb.length == 4)
+        return numb[0].toString() + numb[1].toString() + ':' + numb[2].toString() + numb[3].toString() + ':00Z';
+    
+}
 
 app.get("/", function (req, res) {
 
