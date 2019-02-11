@@ -17,7 +17,7 @@ app.post("/answerme", function (req, res) {
 });
 
 app.get("/botLogo", function (req, res) {
-    console.log('>> handleIncoming > response: ' + JSON.stringify(handleIncoming.getTime(req.body)));
+    //console.log('>> handleIncoming > response: ' + JSON.stringify(handleIncoming.getTime(req.body)));
     res.sendFile(__dirname + '/assets/worldClock.jpeg');
 });
 

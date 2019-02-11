@@ -43,7 +43,9 @@ handleIncoming.getTime = function(requestBody){
     var targetDate = new Date(); // Current date/time of user computer
     var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60; // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
     var apikey = 'AIzaSyDarfOMF2IiRZ7rsm-G9LWAg6hIDhLHyNE';
+    /*
     var requestURL = googleMapsApiEndpoint + loc + '&timestamp=' + timestamp + '&key=' + apikey;
+ 
     request(requestURL, function (error, response, body) {
         
         var responseJson = JSON.parse(body);
@@ -54,7 +56,7 @@ handleIncoming.getTime = function(requestBody){
         }
     });
 
-    requestBody.message = {text : 'what is 5 PM in Delhi?'};
+    
     var optionsIndia = {
         timeZone: handleIncoming.timeZones.India,
         year: 'numeric', month: 'numeric', day: 'numeric',
@@ -72,33 +74,45 @@ handleIncoming.getTime = function(requestBody){
     formatterUS = new Intl.DateTimeFormat([], optionsUS)
     var currentTimeNY = formatterUS.format(new Date());
     console.log('>> currentTime NY : ' + currentTimeNY);
-
     console.log('>> request text : ' + requestBody.message.text);
+    */
+
     var returnObj = { text : ''};
+    //requestBody.message = {text : 'what is 9 AM EST in Delhi?'};
     var questionString = requestBody.message.text.toLowerCase();
 
-    var numberValue, output =[];
-    handleIncoming.validateInputString(questionString);
-    console.log('>> handleIncoming validations : ' + JSON.stringify(handleIncoming.validations));
-    numberValue = questionString.toLowerCase().match(/\d/g);
-    numberValue = numberValue.join("");
-    console.log('>> numberValue : ' + numberValue);
-    var sNumber = numberValue.toString();
-    for (var i = 0, len = sNumber.length; i < len; i += 1) {
-        output.push(+sNumber.charAt(i));
+    if(questionString.indexOf('current time') >= 0 || questionString.length <5){
+        returnObj.text = 'Current Time in *Boston* is : *' + moment().tz('America/New_York').format('LLLL') + '*';
+        returnObj.text += '\nCurrent Time in *India* is : *' + moment().tz('Asia/Colombo').format('LLLL') + '*';
     }
-    var time = moment().format().split('T')[0];
-    console.log('>> time : ' + time);
-    time += 'T' + handleIncoming.getTimeString(output);
-    console.log('>> time : ' + time);
+    else{
+        var numberValue, output =[];
+        handleIncoming.validateInputString(questionString);
+        console.log('>> handleIncoming validations : ' + JSON.stringify(handleIncoming.validations));
+        numberValue = questionString.toLowerCase().match(/\d/g);
+        numberValue = numberValue.join("");
+        console.log('>> numberValue : ' + numberValue);
+        var sNumber = numberValue.toString();
+        for (var i = 0, len = sNumber.length; i < len; i += 1) {
+            output.push(+sNumber.charAt(i));
+        }
+        var time = moment().format().split('T')[0];
+        console.log('>> time : ' + time);
+        time += ' ' + handleIncoming.getTimeString(output);
+        console.log('>> time : ' + time);
+        
+        var queriedTimeStamp = moment(time);
+        console.log('>> queriedTimeStamp : ' + queriedTimeStamp);
+        var newYorkLocal = moment.tz(time, "America/New_York");
+        console.log('>> New York Local : ' + newYorkLocal.format('LLLL'));
 
-    console.log('>> New York : ' + moment(time).tz('America/New_York').format('ha z'));
-    console.log('>> Delhi : ' + moment(time).tz('Asia/Colombo').format('ha z'));
+        var indiaLocal = newYorkLocal.clone().tz('Asia/Colombo');
+        console.log('>> India Local : ' + indiaLocal.format('LLLL'));
 
-    returnObj.text = 'Current Time in *Boston* is : *' + moment(time).tz('America/New_York').format('ha z') + '*';
-    returnObj.text += '\nCurrent Time in *India* is : *' + moment(time).tz('Asia/Colombo').format('ha z') + '*';
+        
+        returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
+    }
     return returnObj;
-    
 }    
 
 handleIncoming.getTimeString = function(numberArray){
@@ -112,15 +126,15 @@ handleIncoming.getTimeString = function(numberArray){
     }
 
     if(numberArray.length == 1)
-        return '0' + numberArray[0].toString() + ':00:00Z';
+        return '0' + numberArray[0].toString() + ':00';
     if(numberArray.length == 2)
-        return numberArray[0].toString() + numberArray[1].toString() + ':00:00Z';
+        return numberArray[0].toString() + numberArray[1].toString() + ':00';
     if(numberArray.length == 3 && !isConverted)
-        return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + ':00Z';
+        return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + '';
     if(numberArray.length == 3 && isConverted)
-        return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + ':00Z';
+        return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + '';
     if(numberArray.length == 4)
-        return numberArray[0].toString() + numberArray[1].toString() + ':' + numberArray[2].toString() + numberArray[3].toString() + ':00Z';
+        return numberArray[0].toString() + numberArray[1].toString() + ':' + numberArray[2].toString() + numberArray[3].toString() + '';
     
 }
 
