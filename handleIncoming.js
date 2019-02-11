@@ -52,100 +52,118 @@ handleIncoming.reset = function(){
     handleIncoming.ask.india_zone = false;
 }
 
+handleIncoming.newAdditon = function(requestBody){
+    
+    var returnObj = { text : ''};
+    userId = requestBody.user.name;
+    returnObj.text = 'Hey ' + userId + '! Thank you for adding _Time Bot!_';
+    returnObj.text += '\n Don\'t worry about converting meeting times into different timezones. Time Bot will do it for you';
+    returnObj.text += '\n\n You ask questions like - '
+    returnObj.text += '\n*What is 9 AM EST in IST?*';
+    returnObj.text += '\n*What is 7 PM IST in EST?*';
+    returnObj.text += '\n*Current Time*';
+    return returnObj;
+}
+
 handleIncoming.getTime = function(requestBody){
 
-    handleIncoming.reset();
-    console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
-    var loc = handleIncoming.latLongs.hoboken; // Tokyo expressed as lat,lng tuple
-    var targetDate = new Date(); // Current date/time of user computer
-    var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60; // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
-    var apikey = 'AIzaSyDarfOMF2IiRZ7rsm-G9LWAg6hIDhLHyNE';
-    /*
-    var requestURL = googleMapsApiEndpoint + loc + '&timestamp=' + timestamp + '&key=' + apikey;
- 
-    request(requestURL, function (error, response, body) {
-        
-        var responseJson = JSON.parse(body);
-        if (responseJson.status == 'OK'){ // if API reports everything was returned successfully
-            var offsets = responseJson.dstOffset * 1000 + responseJson.rawOffset * 1000 // get DST and time zone offsets in milliseconds
-            var localdate = new Date(timestamp * 1000 + offsets) // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
-            console.log('>> Local Time in hoboken from google : ' + localdate.toLocaleString()) // Display current Tokyo date and time
-        }
-    });
-
+    if(requestBody.type === 'ADDED_TO_SPACE'){
+        handleIncoming.newAdditon(requestBody);
+    }
+    if(requestBody.type != 'ADDED_TO_SPACE'){
+        handleIncoming.reset();
+        console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
+        var loc = handleIncoming.latLongs.hoboken; // Tokyo expressed as lat,lng tuple
+        var targetDate = new Date(); // Current date/time of user computer
+        var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60; // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
+        var apikey = 'AIzaSyDarfOMF2IiRZ7rsm-G9LWAg6hIDhLHyNE';
+        /*
+        var requestURL = googleMapsApiEndpoint + loc + '&timestamp=' + timestamp + '&key=' + apikey;
     
-    var optionsIndia = {
-        timeZone: handleIncoming.timeZones.India,
-        year: 'numeric', month: 'numeric', day: 'numeric',
-        hour: 'numeric', minute: 'numeric', second: 'numeric',
-    },
-    formatterIndia = new Intl.DateTimeFormat([], optionsIndia)
-    var currentTimeIndia = formatterIndia.format(new Date());
-    console.log('>> Current Time India : ' + currentTimeIndia);
-
-    var optionsUS = {
-        timeZone: handleIncoming.timeZones.US,
-        year: 'numeric', month: 'numeric', day: 'numeric',
-        hour: 'numeric', minute: 'numeric', second: 'numeric',
-    },
-    formatterUS = new Intl.DateTimeFormat([], optionsUS)
-    var currentTimeNY = formatterUS.format(new Date());
-    console.log('>> currentTime NY : ' + currentTimeNY);
-    console.log('>> request text : ' + requestBody.message.text);
-    */
-
-    var returnObj = { text : ''};
-    //requestBody.message = {text : 'what is 9 AM EST in Delhi?'};
-    var questionString = requestBody.message.text.toLowerCase();
-
-    if(questionString.indexOf('current time') >= 0 || questionString.length <5){
-        returnObj.text = 'Current Time in *Boston* is : *' + moment().tz('America/New_York').format('LLLL') + '*';
-        returnObj.text += '\nCurrent Time in *India* is : *' + moment().tz('Asia/Colombo').format('LLLL') + '*';
-    }
-    else{
-        var numberValue, output =[];
-        handleIncoming.validateInputString(questionString);
-        console.log('>> handleIncoming validations : ' + JSON.stringify(handleIncoming.validations));
-        numberValue = questionString.toLowerCase().match(/\d/g);
-        numberValue = numberValue.join("");
-        console.log('>> numberValue : ' + numberValue);
-        var sNumber = numberValue.toString();
-        for (var i = 0, len = sNumber.length; i < len; i += 1) {
-            output.push(+sNumber.charAt(i));
-        }
-        var time = null;
-        time = moment().format().split('T')[0];
-        console.log('>> time : ' + time);
-        time += ' ' + handleIncoming.getTimeString(output);
-        console.log('>> time : ' + time);
-        
-        var queriedTimeStamp = moment(time);
-        console.log('>> queriedTimeStamp : ' + queriedTimeStamp);
-
-        var subparts;
-        if(questionString.indexOf('in') >= 0 ){
-            subparts = questionString.split('in');
-        }
-        if(subparts[0].indexOf('est') >= 0 ){
-            handleIncoming.ask.us_zone = true;
-        }
-        if(subparts[0].indexOf('ist') >= 0 ){
-            handleIncoming.ask.india_zone = true;
-        }
-        var askTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.US : handleIncoming.timeZones.India;
-        var answerTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.India : handleIncoming.timeZones.US;
-        //var newYorkLocal = moment.tz(time, "America/New_York");
-        var userAskTime = moment.tz(time, askTimeZone);
-        console.log('>> userAskTime Local : ' + userAskTime.format('LLLL'));
-
-        var userAnswerTime = userAskTime.clone().tz(answerTimeZone);
-        console.log('>> userAnswerTime Local : ' + userAnswerTime.format('LLLL'));
+        request(requestURL, function (error, response, body) {
+            
+            var responseJson = JSON.parse(body);
+            if (responseJson.status == 'OK'){ // if API reports everything was returned successfully
+                var offsets = responseJson.dstOffset * 1000 + responseJson.rawOffset * 1000 // get DST and time zone offsets in milliseconds
+                var localdate = new Date(timestamp * 1000 + offsets) // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
+                console.log('>> Local Time in hoboken from google : ' + localdate.toLocaleString()) // Display current Tokyo date and time
+            }
+        });
 
         
-        //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
-        returnObj.text = handleIncoming.getReturnString(userAnswerTime, time);
+        var optionsIndia = {
+            timeZone: handleIncoming.timeZones.India,
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+        },
+        formatterIndia = new Intl.DateTimeFormat([], optionsIndia)
+        var currentTimeIndia = formatterIndia.format(new Date());
+        console.log('>> Current Time India : ' + currentTimeIndia);
+
+        var optionsUS = {
+            timeZone: handleIncoming.timeZones.US,
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+        },
+        formatterUS = new Intl.DateTimeFormat([], optionsUS)
+        var currentTimeNY = formatterUS.format(new Date());
+        console.log('>> currentTime NY : ' + currentTimeNY);
+        console.log('>> request text : ' + requestBody.message.text);
+        */
+
+        var returnObj = { text : ''};
+        //requestBody.message = {text : 'what is 9 AM EST in Delhi?'};
+        var questionString = requestBody.message.text.toLowerCase();
+
+        if(questionString.indexOf('current time') >= 0 || questionString.length <5){
+            returnObj.text = 'Current Time in *Boston* is : *' + moment().tz('America/New_York').format('LLLL') + '*';
+            returnObj.text += '\nCurrent Time in *India* is : *' + moment().tz('Asia/Colombo').format('LLLL') + '*';
+        }
+        else{
+            var numberValue, output =[];
+            handleIncoming.validateInputString(questionString);
+            console.log('>> handleIncoming validations : ' + JSON.stringify(handleIncoming.validations));
+            numberValue = questionString.toLowerCase().match(/\d/g);
+            numberValue = numberValue.join("");
+            console.log('>> numberValue : ' + numberValue);
+            var sNumber = numberValue.toString();
+            for (var i = 0, len = sNumber.length; i < len; i += 1) {
+                output.push(+sNumber.charAt(i));
+            }
+            var time = null;
+            time = moment().format().split('T')[0];
+            console.log('>> time : ' + time);
+            time += ' ' + handleIncoming.getTimeString(output);
+            console.log('>> time : ' + time);
+            
+            var queriedTimeStamp = moment(time);
+            console.log('>> queriedTimeStamp : ' + queriedTimeStamp);
+
+            var subparts;
+            if(questionString.indexOf('in') >= 0 ){
+                subparts = questionString.split('in');
+            }
+            if(subparts[0].indexOf('est') >= 0 ){
+                handleIncoming.ask.us_zone = true;
+            }
+            if(subparts[0].indexOf('ist') >= 0 ){
+                handleIncoming.ask.india_zone = true;
+            }
+            var askTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.US : handleIncoming.timeZones.India;
+            var answerTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.India : handleIncoming.timeZones.US;
+            //var newYorkLocal = moment.tz(time, "America/New_York");
+            var userAskTime = moment.tz(time, askTimeZone);
+            console.log('>> userAskTime Local : ' + userAskTime.format('LLLL'));
+
+            var userAnswerTime = userAskTime.clone().tz(answerTimeZone);
+            console.log('>> userAnswerTime Local : ' + userAnswerTime.format('LLLL'));
+
+            
+            //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
+            returnObj.text = handleIncoming.getReturnString(userAnswerTime, time);
+        }
+        return returnObj;
     }
-    return returnObj;
 }    
 
 handleIncoming.getReturnString = function(answerLocal, time){
