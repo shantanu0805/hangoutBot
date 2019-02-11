@@ -134,7 +134,7 @@ handleIncoming.getTime = function(requestBody){
     return returnObj;
 }    
 
-handleIncoming.getReturnString = function(askLocal, answerLocal, time){
+handleIncoming.getReturnString = function(answerLocal, time){
 
     var returnText = time + ' ';
     
