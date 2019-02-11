@@ -129,7 +129,7 @@ handleIncoming.getTime = function(requestBody){
 
         
         //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
-        returnObj.text = handleIncoming.getReturnString(answerLocal, time);
+        returnObj.text = handleIncoming.getReturnString(userAnswerTime, time);
     }
     return returnObj;
 }    
