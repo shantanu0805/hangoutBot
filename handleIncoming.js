@@ -70,7 +70,7 @@ handleIncoming.getTime = function(requestBody){
     if(requestBody.type === 'ADDED_TO_SPACE'){
         handleIncoming.newAdditon(requestBody);
     }
-    if(requestBody.type != 'ADDED_TO_SPACE'){
+    if(requestBody.type === 'MESSAGE'){
         handleIncoming.reset();
         console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
         var loc = handleIncoming.latLongs.hoboken; // Tokyo expressed as lat,lng tuple
