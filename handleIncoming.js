@@ -129,27 +129,20 @@ handleIncoming.getTime = function(requestBody){
 
         
         //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
-        returnObj.text = handleIncoming.getReturnString(indiaLocal, newYorkLocal, time);
+        returnObj.text = handleIncoming.getReturnString(answerLocal, time);
     }
     return returnObj;
 }    
 
-handleIncoming.getReturnString = function(indiaLocal, newYorkLocal, time){
+handleIncoming.getReturnString = function(askLocal, answerLocal, time){
 
     var returnText = time + ' ';
-    /*
-    var subparts;
-    if(questionString.indexOf('in') >= 0 ){
-        subparts = questionString.split('in');
-    }
-    if(subparts[0].indexOf('est') >= 0 ){
-    */
+    
     if(handleIncoming.ask.us_zone){
-        returnText += ' EST is : *' + indiaLocal.format('LLLL') + ' IST*';
+        returnText += ' EST is : *' + answerLocal.format('LLLL') + ' IST*';
     }
-    //if(subparts[0].indexOf('ist') >= 0 ){
     if(handleIncoming.ask.india_zone){
-        returnText += ' IST is : *' + newYorkLocal.format('LLLL') + ' EST*';
+        returnText += ' IST is : *' + answerLocal.format('LLLL') + ' EST*';
     }
     return returnText;
 }
