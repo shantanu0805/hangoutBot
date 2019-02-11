@@ -128,7 +128,7 @@ handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLoc
         returnText += ' EST is : *' + indiaLocal.format('LLLL') + ' IST*';
     }
     if(subparts[0].indexOf('ist') >= 0 ){
-        returnText += ' IST is : *' + newYorkLocal .format('LLLL') + ' EST*';
+        returnText += ' IST is : *' + newYorkLocal.format('LLLL') + ' EST*';
     }
     return returnText;
 }
