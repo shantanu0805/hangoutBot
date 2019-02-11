@@ -119,16 +119,16 @@ handleIncoming.getTime = function(requestBody){
 handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLocal, time){
 
     console.log('>> questionString : ' + questionString);
-    var returnText = '*' + time + '* ';
+    var returnText = time + ' ';
     var subparts;
     if(questionString.indexOf('in') >= 0 ){
         subparts = questionString.split('in');
     }
     if(subparts[0].indexOf('est') >= 0 ){
-        returnText += ' *EST is : ' + indiaLocal.format('LLLL') + ' IST*';
+        returnText += ' EST is : *' + indiaLocal.format('LLLL') + ' IST*';
     }
     if(subparts[0].indexOf('ist') >= 0 ){
-        returnText += ' *IST is : ' + newYorkLocal .format('LLLL') + ' EST*';
+        returnText += ' IST is : *' + newYorkLocal .format('LLLL') + ' EST*';
     }
     return returnText;
 }
