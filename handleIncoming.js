@@ -68,7 +68,7 @@ handleIncoming.newAdditon = function(requestBody){
 handleIncoming.getTime = function(requestBody){
 
     if(requestBody.type === 'ADDED_TO_SPACE'){
-        handleIncoming.newAdditon(requestBody);
+        return handleIncoming.newAdditon(requestBody);
     }
     if(requestBody.type === 'MESSAGE'){
         handleIncoming.reset();
