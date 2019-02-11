@@ -40,8 +40,21 @@ handleIncoming.validations = {
     has_India_City : false,
 };
 
+handleIncoming.reset = function(){
+    
+    handleIncoming.validations.has_AM = false;
+    handleIncoming.validations.has_PM = false;
+    handleIncoming.validations.has_Digit = false;
+    handleIncoming.validations.has_US_City = false;
+    handleIncoming.validations.has_India_City = false;
+    
+    handleIncoming.ask.us_zone = false;
+    handleIncoming.ask.india_zone = false;
+}
+
 handleIncoming.getTime = function(requestBody){
 
+    handleIncoming.reset();
     console.log('>> handleIncoming > request body : ' + JSON.stringify(requestBody));
     var loc = handleIncoming.latLongs.hoboken; // Tokyo expressed as lat,lng tuple
     var targetDate = new Date(); // Current date/time of user computer
@@ -100,7 +113,8 @@ handleIncoming.getTime = function(requestBody){
         for (var i = 0, len = sNumber.length; i < len; i += 1) {
             output.push(+sNumber.charAt(i));
         }
-        var time = moment().format().split('T')[0];
+        var time = null;
+        time = moment().format().split('T')[0];
         console.log('>> time : ' + time);
         time += ' ' + handleIncoming.getTimeString(output);
         console.log('>> time : ' + time);
@@ -136,7 +150,8 @@ handleIncoming.getTime = function(requestBody){
 
 handleIncoming.getReturnString = function(answerLocal, time){
 
-    var returnText = time + ' ';
+    var returnText = '';
+    returnText += time + ' ';
     
     if(handleIncoming.ask.us_zone){
         returnText += ' EST is : *' + answerLocal.format('LLLL') + ' IST*';
