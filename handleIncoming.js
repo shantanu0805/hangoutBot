@@ -66,7 +66,7 @@ handleIncoming.newAdditon = function(requestBody){
 }
 
 handleIncoming.getTime = function(requestBody){
-
+    //requestBody.type = 'MESSAGE';
     if(requestBody.type === 'ADDED_TO_SPACE'){
         return handleIncoming.newAdditon(requestBody);
     }
@@ -112,7 +112,7 @@ handleIncoming.getTime = function(requestBody){
         */
 
         var returnObj = { text : ''};
-        //requestBody.message = {text : 'what is 9 AM EST in Delhi?'};
+        //requestBody.message = {text : 'what is 9:30 PM EST in Delhi?'};
         var questionString = requestBody.message.text.toLowerCase();
 
         if(questionString.indexOf('current time') >= 0 || questionString.length <5){
@@ -195,7 +195,7 @@ handleIncoming.getTimeString = function(numberArray){
     if(numberArray.length == 2)
         return numberArray[0].toString() + numberArray[1].toString() + ':00';
     if(numberArray.length == 3 && !isConverted)
-        return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + '';
+        return '0' + numberArray[0].toString() + ':' + numberArray[1].toString()  + numberArray[2].toString() + '';
     if(numberArray.length == 3 && isConverted)
         return '0' + numberArray[0].toString() + numberArray[1].toString() + ':0' + numberArray[2].toString() + '';
     if(numberArray.length == 4)
