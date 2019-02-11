@@ -62,12 +62,14 @@ handleIncoming.newAdditon = function(requestBody){
     returnObj.text += '\n*What is 9 AM EST in IST?*';
     returnObj.text += '\n*What is 7 PM IST in EST?*';
     returnObj.text += '\n*Current Time*';
+    console.log('>> handleIncoming > newAdditon > returnObj.text : ' + returnObj.text);
     return returnObj;
 }
 
 handleIncoming.getTime = function(requestBody){
 
     if(requestBody.type === 'ADDED_TO_SPACE'){
+        console.log('>> handleIncoming > ADDED_TO_SPACE : ');
         return handleIncoming.newAdditon(requestBody);
     }
     if(requestBody.type === 'MESSAGE'){
