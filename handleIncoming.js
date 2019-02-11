@@ -130,6 +130,7 @@ handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLoc
     if(subparts[0].indexOf('ist') >= 0 ){
         returnText += ' * IST is : ' + newYorkLocal + ' EST *';
     }
+    return returnText;
 }
 
 handleIncoming.getTimeString = function(numberArray){
