@@ -9,6 +9,10 @@ handleIncoming.timeZones = {
     'India' : 'Asia/Colombo',
     'US' : 'America/New_York'
 }
+handleIncoming.ask = {
+    'us_zone' : false,
+    'india_zone' : false
+}
 
 handleIncoming.latLongs = {
     'hoboken' : '40.743992, -74.032364',
@@ -103,31 +107,48 @@ handleIncoming.getTime = function(requestBody){
         
         var queriedTimeStamp = moment(time);
         console.log('>> queriedTimeStamp : ' + queriedTimeStamp);
-        var newYorkLocal = moment.tz(time, "America/New_York");
-        console.log('>> New York Local : ' + newYorkLocal.format('LLLL'));
 
-        var indiaLocal = newYorkLocal.clone().tz('Asia/Colombo');
-        console.log('>> India Local : ' + indiaLocal.format('LLLL'));
+        var subparts;
+        if(questionString.indexOf('in') >= 0 ){
+            subparts = questionString.split('in');
+        }
+        if(subparts[0].indexOf('est') >= 0 ){
+            handleIncoming.ask.us_zone = true;
+        }
+        if(subparts[0].indexOf('ist') >= 0 ){
+            handleIncoming.ask.india_zone = true;
+        }
+        var askTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.US : handleIncoming.timeZones.India;
+        var answerTimeZone = handleIncoming.ask.us_zone ? handleIncoming.timeZones.India : handleIncoming.timeZones.US;
+        //var newYorkLocal = moment.tz(time, "America/New_York");
+        var userAskTime = moment.tz(time, askTimeZone);
+        console.log('>> userAskTime Local : ' + userAskTime.format('LLLL'));
+
+        var userAnswerTime = userAskTime.clone().tz(answerTimeZone);
+        console.log('>> userAnswerTime Local : ' + userAnswerTime.format('LLLL'));
 
         
         //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
-        returnObj.text = handleIncoming.getReturnString(questionString, indiaLocal, newYorkLocal, time);
+        returnObj.text = handleIncoming.getReturnString(indiaLocal, newYorkLocal, time);
     }
     return returnObj;
 }    
 
-handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLocal, time){
+handleIncoming.getReturnString = function(indiaLocal, newYorkLocal, time){
 
-    console.log('>> questionString : ' + questionString);
     var returnText = time + ' ';
+    /*
     var subparts;
     if(questionString.indexOf('in') >= 0 ){
         subparts = questionString.split('in');
     }
     if(subparts[0].indexOf('est') >= 0 ){
+    */
+    if(handleIncoming.ask.us_zone){
         returnText += ' EST is : *' + indiaLocal.format('LLLL') + ' IST*';
     }
-    if(subparts[0].indexOf('ist') >= 0 ){
+    //if(subparts[0].indexOf('ist') >= 0 ){
+    if(handleIncoming.ask.india_zone){
         returnText += ' IST is : *' + newYorkLocal.format('LLLL') + ' EST*';
     }
     return returnText;
