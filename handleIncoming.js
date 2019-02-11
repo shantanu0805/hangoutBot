@@ -110,10 +110,27 @@ handleIncoming.getTime = function(requestBody){
         console.log('>> India Local : ' + indiaLocal.format('LLLL'));
 
         
-        returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
+        //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
+        returnObj.text = handleIncoming.getReturnString(questionString, indiaLocal, newYorkLocal);
     }
     return returnObj;
 }    
+
+handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLocal, time){
+
+    console.log('>> questionString : ' + questionString);
+    var returnText = '*' + time + '* ';
+    var subparts;
+    if(questionString.indexOf('in') >= 0 ){
+        subparts = questionString.split('in');
+    }
+    if(subparts[0].indexOf('est') >= 0 ){
+        returnText += ' * EST is : ' + indiaLocal + ' IST *';
+    }
+    if(subparts[0].indexOf('ist') >= 0 ){
+        returnText += ' * IST is : ' + newYorkLocal + ' EST *';
+    }
+}
 
 handleIncoming.getTimeString = function(numberArray){
 
