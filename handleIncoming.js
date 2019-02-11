@@ -111,7 +111,7 @@ handleIncoming.getTime = function(requestBody){
 
         
         //returnObj.text = time + ' EST is ' + indiaLocal.format('LLLL');
-        returnObj.text = handleIncoming.getReturnString(questionString, indiaLocal, newYorkLocal);
+        returnObj.text = handleIncoming.getReturnString(questionString, indiaLocal, newYorkLocal, time);
     }
     return returnObj;
 }    
@@ -125,10 +125,10 @@ handleIncoming.getReturnString = function(questionString, indiaLocal, newYorkLoc
         subparts = questionString.split('in');
     }
     if(subparts[0].indexOf('est') >= 0 ){
-        returnText += ' * EST is : ' + indiaLocal + ' IST *';
+        returnText += ' *EST is : ' + indiaLocal.format('LLLL') + ' IST*';
     }
     if(subparts[0].indexOf('ist') >= 0 ){
-        returnText += ' * IST is : ' + newYorkLocal + ' EST *';
+        returnText += ' *IST is : ' + newYorkLocal .format('LLLL') + ' EST*';
     }
     return returnText;
 }
