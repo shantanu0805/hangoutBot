@@ -97,8 +97,11 @@ handleIncoming.getTime = function(requestBody){
             var questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
-                returnObj.text = 'Current Time in *Boston* is : *' + moment().tz('America/New_York').format('LLLL') + '*';
-                returnObj.text += '\nCurrent Time in *India* is : *' + moment().tz('Asia/Colombo').format('LLLL') + '*';
+                returnObj.text = 'Current Time in *Boston (EST)* is : *' + moment().tz(handleIncoming.timeZones.EST).format('LLLL') + '*';
+                returnObj.text += '\nCurrent Time in *Chicago (CST)* is : *' + moment().tz(handleIncoming.timeZones.CST).format('LLLL') + '*';
+                returnObj.text += '\nCurrent Time in *Denver (MST)* is : *' + moment().tz(handleIncoming.timeZones.MST).format('LLLL') + '*';
+                returnObj.text += '\nCurrent Time in *Los Angeles (PST)* is : *' + moment().tz(handleIncoming.timeZones.PST).format('LLLL') + '*';
+                returnObj.text += '\nCurrent Time in *India (IST)* is : *' + moment().tz(handleIncoming.timeZones.India).format('LLLL') + '*';
             }
             else{
                 var numberValue, output =[];
