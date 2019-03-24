@@ -1,12 +1,25 @@
 var handleIncoming = {};
 var moment = require('moment');
+var path = require('path');
+var dbhelper = require(path.join(__dirname + '/dbhelper.js'));
 
 handleIncoming.timeZones = {
-    'IST' : 'Asia/Colombo',
+    'IST' : 'Asia/Calcutta',
     'EST' : 'America/New_York',
     'CST' : 'America/Regina',//Chicago
     'MST' : 'America/Denver',//Denver
     'PST' : 'America/Vancouver'//Los Angeles
+}
+
+handleIncoming.userQueryJSON = {
+    'Timestamp' : '',
+    'QueryText' : '',
+    'BotAnswer' : '',
+    'RequestType' : '',
+    'UserName' : '',
+    'Success' : '',
+    'RoomName' : '',
+    'RoomOrDM' : ''
 }
 
 handleIncoming.ask = {
@@ -83,14 +96,15 @@ handleIncoming.defaultReply = function(){
 handleIncoming.getTime = function(requestBody){
 
     try{
-        //requestBody.type = 'MESSAGE';
+        requestBody.type = 'MESSAGE';
         if(requestBody.type === 'ADDED_TO_SPACE'){
             return handleIncoming.newAdditon(requestBody);
         }
         if(requestBody.type === 'MESSAGE'){
+            var date;
             handleIncoming.reset(); 
             var returnObj = { text : ''};
-            //requestBody.message = {text : 'what is 9:30 PM EST in IST?'};
+            requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
             var questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
@@ -110,6 +124,7 @@ handleIncoming.getTime = function(requestBody){
                     }
                     var time = null;
                     time = moment().format().split('T')[0];
+                    date = time;
                     console.log('>> time : ' + time);
                     time += ' ' + handleIncoming.getTimeString(output);
                     console.log('>> time : ' + time);
@@ -121,10 +136,21 @@ handleIncoming.getTime = function(requestBody){
                     console.log('>> handleIncoming.timeZones [] : ' + handleIncoming.timeZones[handleIncoming.zone.from]);
                     var userAskTime = moment.tz(time, handleIncoming.timeZones[handleIncoming.zone.from]);
                     var userAnswerTime = userAskTime.clone().tz(handleIncoming.timeZones[handleIncoming.zone.to]);
-
+                    var fromTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.from]).format('z');
+                    var toTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.to]).format('z');
                     var returnText = '';
-                    returnText += time + ' ' + handleIncoming.zone.from + ' is : *' + userAnswerTime.format('LLLL') + ' ' + handleIncoming.zone.to + '*';
+                    returnText += time + ' ' + fromTimeZoneAbbr + ' is : *' + userAnswerTime.format('LLLL') + ' ' + toTimeZoneAbbr + '*';
                     returnObj.text = returnText;
+
+                    handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
+                    handleIncoming.userQueryJSON.QueryText = questionString;
+                    handleIncoming.userQueryJSON.BotAnswer = returnObj.text;
+                    handleIncoming.userQueryJSON.RequestType = requestBody.type;
+                    handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
+                    handleIncoming.userQueryJSON.Success = true;
+                    handleIncoming.userQueryJSON.RoomName = 'test';
+                    handleIncoming.userQueryJSON.RoomOrDM = requestBody.space.type;
+                    dbhelper.insertUserQueryRequest(handleIncoming.userQueryJSON);
                 }
                 else{
                     return handleIncoming.defaultReply();
