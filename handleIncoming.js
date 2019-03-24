@@ -61,6 +61,15 @@ handleIncoming.reset = function(){
     
     handleIncoming.zone.from = '';
     handleIncoming.zone.to = '';
+
+    handleIncoming.userQueryJSON.Timestamp = '';
+    handleIncoming.userQueryJSON.QueryText = '';
+    handleIncoming.userQueryJSON.BotAnswer = '';
+    handleIncoming.userQueryJSON.RequestType = '';
+    handleIncoming.userQueryJSON.UserName = '';
+    handleIncoming.userQueryJSON.Success = '';
+    handleIncoming.userQueryJSON.RoomName = '';
+    handleIncoming.userQueryJSON.RoomOrDM = '';
 }
 
 handleIncoming.newAdditon = function(requestBody){
@@ -96,7 +105,7 @@ handleIncoming.defaultReply = function(){
 handleIncoming.getTime = function(requestBody){
 
     try{
-        requestBody.type = 'MESSAGE';
+        //requestBody.type = 'MESSAGE';
         if(requestBody.type === 'ADDED_TO_SPACE'){
             return handleIncoming.newAdditon(requestBody);
         }
@@ -104,7 +113,7 @@ handleIncoming.getTime = function(requestBody){
             var date;
             handleIncoming.reset(); 
             var returnObj = { text : ''};
-            requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
+            //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
             var questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
