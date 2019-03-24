@@ -82,6 +82,17 @@ handleIncoming.newAdditon = function(requestBody){
     returnObj.text += '\n*1) What is 9 AM EST in IST?*';
     returnObj.text += '\n*2) What is 7 PM IST in EST?*';
     returnObj.text += '\n*3) Current Time*';
+
+    handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
+    handleIncoming.userQueryJSON.QueryText = 'N/A';
+    handleIncoming.userQueryJSON.BotAnswer = returnObj.text;
+    handleIncoming.userQueryJSON.RequestType = requestBody.type;
+    handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
+    handleIncoming.userQueryJSON.Success = true;
+    handleIncoming.userQueryJSON.RoomName = requestBody.space.name;
+    handleIncoming.userQueryJSON.RoomOrDM = requestBody.space.type;
+    dbhelper.insertUserQueryRequest(handleIncoming.userQueryJSON);
+
     return returnObj;
 }
 
