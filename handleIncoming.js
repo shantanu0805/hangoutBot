@@ -96,7 +96,7 @@ handleIncoming.newAdditon = function(requestBody){
     return returnObj;
 }
 
-handleIncoming.defaultReply = function(requestBody, questionString){
+handleIncoming.defaultReply = function(requestBody){
     /* 
         'IST' : 'Asia/Colombo',
         'EST' : 'America/New_York',
@@ -112,7 +112,7 @@ handleIncoming.defaultReply = function(requestBody, questionString){
     returnObj.text += '\nCurrent Time in *India (IST)* is : *' + moment().tz(handleIncoming.timeZones.IST).format('LLLL') + '*';
 
     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
-    handleIncoming.userQueryJSON.QueryText = questionString;
+    handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
     handleIncoming.userQueryJSON.BotAnswer = returnObj.text;
     handleIncoming.userQueryJSON.RequestType = requestBody.type;
     handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
@@ -140,7 +140,7 @@ handleIncoming.getTime = function(requestBody){
             questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
-                return handleIncoming.defaultReply(requestBody, questionString);
+                return handleIncoming.defaultReply(requestBody);
             }
             else{
                 var numberValue, output =[];
@@ -175,7 +175,7 @@ handleIncoming.getTime = function(requestBody){
                     returnObj.text = returnText;
 
                     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
-                    handleIncoming.userQueryJSON.QueryText = questionString;
+                    handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
                     handleIncoming.userQueryJSON.BotAnswer = returnObj.text;
                     handleIncoming.userQueryJSON.RequestType = requestBody.type;
                     handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
@@ -185,14 +185,14 @@ handleIncoming.getTime = function(requestBody){
                     dbhelper.insertUserQueryRequest(handleIncoming.userQueryJSON);
                 }
                 else{
-                    return handleIncoming.defaultReply(requestBody, questionString);
+                    return handleIncoming.defaultReply(requestBody);
                 }
             }
             return returnObj;
         }
     }
     catch(err) {
-        return handleIncoming.defaultReply(requestBody, questionString);
+        return handleIncoming.defaultReply(requestBody);
     }
 }    
 
