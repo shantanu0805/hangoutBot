@@ -224,6 +224,9 @@ handleIncoming.getAskTimeZones = function(questionString){
         if(subparts[0].indexOf('ist') >= 0 ){
             handleIncoming.zone.from = 'IST';
         }
+        if(subparts[0].indexOf('gmt') >= 0 || subparts[0].indexOf('bst') >= 0 ){
+            handleIncoming.zone.from = 'GMT';
+        }
 
         if(subparts[1].indexOf('est') >= 0 || subparts[1].indexOf('et') >= 0){
             handleIncoming.zone.to = 'EST';
@@ -239,6 +242,9 @@ handleIncoming.getAskTimeZones = function(questionString){
         }
         if(subparts[1].indexOf('ist') >= 0 ){
             handleIncoming.zone.to = 'IST';
+        }
+        if(subparts[1].indexOf('gmt') >= 0 || subparts[1].indexOf('bst') >= 0 ){
+            handleIncoming.zone.to = 'GMT';
         }
     }
 }
