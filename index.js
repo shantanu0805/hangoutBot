@@ -17,7 +17,7 @@ app.post("/answerme", function (req, res) {
 });
 
 app.get("/botLogo", function (req, res) {
-    //console.log('>> handleIncoming > response: ' + JSON.stringify(handleIncoming.getTime(req.body)));
+    //console.log('>> handleIncoming > response: ' + JSON.stringify(handleIncoming.getTime(req.body))); //Uncomment this for local test
     res.sendFile(__dirname + '/assets/worldClock.jpeg');
 });
 
@@ -55,6 +55,14 @@ app.get("/", function (req, res) {
     var currentTimeNY = formatter.format(new Date());
     console.log('>> currentTime NY : ' + currentTimeNY);
     res.setHeader('Content-Type', 'application/json');
+    /*
+    console.log('\nCurrent Time in *Boston (EST)* is : *' + moment().tz(handleIncoming.timeZones.EST).format('hh:mm A z') + '*');
+    console.log('\nCurrent Time in *Chicago (CST)* is : *' + moment().tz(handleIncoming.timeZones.CST).format('hh:mm A z') + '*');
+    console.log('\nCurrent Time in *Denver (MST)* is : *' + moment().tz(handleIncoming.timeZones.MST).format('hh:mm A z') + '*');
+    console.log('\nCurrent Time in *Los Angeles (PST)* is : *' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '*');
+    console.log('\nCurrent Time in *London (GMT)* is : *' + moment().tz(handleIncoming.timeZones.GMT).format('hh:mm A z') + '*');
+    console.log('\nCurrent Time in *India (IST)* is : *' + moment().tz(handleIncoming.timeZones.IST).format('hh:mm A z') + '*');
+    */
     res.send(currentTime);
 });
 

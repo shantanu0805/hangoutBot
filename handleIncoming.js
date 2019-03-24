@@ -6,9 +6,10 @@ var dbhelper = require(path.join(__dirname + '/dbhelper.js'));
 handleIncoming.timeZones = {
     'IST' : 'Asia/Calcutta',
     'EST' : 'America/New_York',
-    'CST' : 'America/Regina',//Chicago
+    'CST' : 'America/Chicago',//Chicago
     'MST' : 'America/Denver',//Denver
-    'PST' : 'America/Vancouver'//Los Angeles
+    'PST' : 'America/Vancouver',//Los Angeles
+    'GMT' : 'Europe/London'//London
 }
 
 handleIncoming.userQueryJSON = {
@@ -98,18 +99,20 @@ handleIncoming.newAdditon = function(requestBody){
 
 handleIncoming.defaultReply = function(requestBody){
     /* 
-        'IST' : 'Asia/Colombo',
+        'IST' : 'Asia/Calcutta',
         'EST' : 'America/New_York',
-        'CST' : 'America/Regina',//Chicago
+        'CST' : 'America/Chicago',//Chicago
         'MST' : 'America/Denver',//Denver
-        'PST' : 'America/Vancouver'//Los Angeles
+        'PST' : 'America/Vancouver',//Los Angeles
+        'GMT' : 'Europe/London'//London
     */
     var returnObj = { text : ''};
-    returnObj.text = 'Current Time in *Boston (EST)* is : *' + moment().tz(handleIncoming.timeZones.EST).format('LLLL') + '*';
-    returnObj.text += '\nCurrent Time in *Chicago (CST)* is : *' + moment().tz(handleIncoming.timeZones.CST).format('LLLL') + '*';
-    returnObj.text += '\nCurrent Time in *Denver (MST)* is : *' + moment().tz(handleIncoming.timeZones.MST).format('LLLL') + '*';
-    returnObj.text += '\nCurrent Time in *Los Angeles (PST)* is : *' + moment().tz(handleIncoming.timeZones.PST).format('LLLL') + '*';
-    returnObj.text += '\nCurrent Time in *India (IST)* is : *' + moment().tz(handleIncoming.timeZones.IST).format('LLLL') + '*';
+    returnObj.text = 'Current Time in *Los Angeles* is : *' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '*';
+    returnObj.text = '\nCurrent Time in *Denver* is : *' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '*';
+    returnObj.text = '\nCurrent Time in *Chicago* is : *' + moment().tz(handleIncoming.timeZones.CST).format('hh:mm A z') + '*';
+    returnObj.text = '\nCurrent Time in *Boston* is : *' + moment().tz(handleIncoming.timeZones.EST).format('hh:mm A z') + '*';
+    returnObj.text = '\nCurrent Time in *London* is : *' + moment().tz(handleIncoming.timeZones.GMT).format('hh:mm A z') + '*';
+    returnObj.text = '\nCurrent Time in *India* is : *' + moment().tz(handleIncoming.timeZones.IST).format('hh:mm A z') + '*';
 
     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
     handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
@@ -129,14 +132,14 @@ handleIncoming.getTime = function(requestBody){
     var questionString = '';
     handleIncoming.reset(); 
     try{
-        //requestBody.type = 'MESSAGE';
+        //requestBody.type = 'MESSAGE'; //Uncomment this for local test
         if(requestBody.type === 'ADDED_TO_SPACE'){
             return handleIncoming.newAdditon(requestBody);
         }
         if(requestBody.type === 'MESSAGE'){
             var date;
             var returnObj = { text : ''};
-            //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
+            //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'}; //Uncomment this for local test
             questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
@@ -167,12 +170,15 @@ handleIncoming.getTime = function(requestBody){
                     console.log('>> handleIncoming.zone : ' + JSON.stringify(handleIncoming.zone));
                     console.log('>> handleIncoming.timeZones [] : ' + handleIncoming.timeZones[handleIncoming.zone.from]);
                     var userAskTime = moment.tz(time, handleIncoming.timeZones[handleIncoming.zone.from]);
+                    console.log('>> userAskTime : ' + userAskTime.format('hh:mm A z'));
                     var userAnswerTime = userAskTime.clone().tz(handleIncoming.timeZones[handleIncoming.zone.to]);
                     var fromTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.from]).format('z');
                     var toTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.to]).format('z');
                     var returnText = '';
-                    returnText += time + ' ' + fromTimeZoneAbbr + ' is : *' + userAnswerTime.format('LLLL') + ' ' + toTimeZoneAbbr + '*';
+                    //returnText += userAskTime.format('hh:mm A z') + ' ' + fromTimeZoneAbbr + ' is : *' + userAnswerTime.format('hh:mm A z') + ' ' + toTimeZoneAbbr + '*';
+                    returnText += userAskTime.format('hh:mm A z') + ' is : *' + userAnswerTime.format('hh:mm A z') + '*';
                     returnObj.text = returnText;
+                    console.log('>> returnText : ' + returnText);
 
                     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
                     handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
