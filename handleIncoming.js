@@ -85,7 +85,7 @@ handleIncoming.newAdditon = function(requestBody){
     return returnObj;
 }
 
-handleIncoming.defaultReply = function(){
+handleIncoming.defaultReply = function(requestBody, questionString){
     /* 
         'IST' : 'Asia/Colombo',
         'EST' : 'America/New_York',
@@ -99,11 +99,23 @@ handleIncoming.defaultReply = function(){
     returnObj.text += '\nCurrent Time in *Denver (MST)* is : *' + moment().tz(handleIncoming.timeZones.MST).format('LLLL') + '*';
     returnObj.text += '\nCurrent Time in *Los Angeles (PST)* is : *' + moment().tz(handleIncoming.timeZones.PST).format('LLLL') + '*';
     returnObj.text += '\nCurrent Time in *India (IST)* is : *' + moment().tz(handleIncoming.timeZones.IST).format('LLLL') + '*';
+
+    handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
+    handleIncoming.userQueryJSON.QueryText = questionString;
+    handleIncoming.userQueryJSON.BotAnswer = returnObj.text;
+    handleIncoming.userQueryJSON.RequestType = requestBody.type;
+    handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
+    handleIncoming.userQueryJSON.Success = false;
+    handleIncoming.userQueryJSON.RoomName = requestBody.space.name;
+    handleIncoming.userQueryJSON.RoomOrDM = requestBody.space.type;
+    dbhelper.insertUserQueryRequest(handleIncoming.userQueryJSON);
+
     return returnObj;
 }
 
 handleIncoming.getTime = function(requestBody){
 
+    var questionString = '';
     try{
         //requestBody.type = 'MESSAGE';
         if(requestBody.type === 'ADDED_TO_SPACE'){
@@ -114,10 +126,10 @@ handleIncoming.getTime = function(requestBody){
             handleIncoming.reset(); 
             var returnObj = { text : ''};
             //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
-            var questionString = requestBody.message.text.toLowerCase();
+            questionString = requestBody.message.text.toLowerCase();
 
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
-                return handleIncoming.defaultReply();
+                return handleIncoming.defaultReply(requestBody, questionString);
             }
             else{
                 var numberValue, output =[];
@@ -157,19 +169,19 @@ handleIncoming.getTime = function(requestBody){
                     handleIncoming.userQueryJSON.RequestType = requestBody.type;
                     handleIncoming.userQueryJSON.UserName = requestBody.user.displayName;
                     handleIncoming.userQueryJSON.Success = true;
-                    handleIncoming.userQueryJSON.RoomName = 'test';
+                    handleIncoming.userQueryJSON.RoomName = requestBody.space.name;
                     handleIncoming.userQueryJSON.RoomOrDM = requestBody.space.type;
                     dbhelper.insertUserQueryRequest(handleIncoming.userQueryJSON);
                 }
                 else{
-                    return handleIncoming.defaultReply();
+                    return handleIncoming.defaultReply(requestBody, questionString);
                 }
             }
             return returnObj;
         }
     }
     catch(err) {
-        return handleIncoming.defaultReply();
+        return handleIncoming.defaultReply(requestBody, questionString);
     }
 }    
 

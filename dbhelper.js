@@ -26,9 +26,9 @@ dbhelper.insertUserQueryRequest = function (userQueryJSON) {
                 function (err, result) {
                     //done();
                     if (err) {
-                        console.log(err);
+                        console.log('>> Error in inserting record in db : ' + err);
                     } else {
-                        console.log(result);
+                        console.log('Succesfully inserted record in db');
                     }
                 })
         }
