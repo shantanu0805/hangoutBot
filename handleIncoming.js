@@ -108,7 +108,7 @@ handleIncoming.defaultReply = function(requestBody){
     */
     var returnObj = { text : ''};
     returnObj.text = 'Current Time in *Los Angeles* is : *' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '*';
-    returnObj.text += '\nCurrent Time in *Denver* is : *' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '*';
+    returnObj.text += '\nCurrent Time in *Denver* is : *' + moment().tz(handleIncoming.timeZones.MST).format('hh:mm A z') + '*';
     returnObj.text += '\nCurrent Time in *Chicago* is : *' + moment().tz(handleIncoming.timeZones.CST).format('hh:mm A z') + '*';
     returnObj.text += '\nCurrent Time in *Boston* is : *' + moment().tz(handleIncoming.timeZones.EST).format('hh:mm A z') + '*';
     returnObj.text += '\nCurrent Time in *London* is : *' + moment().tz(handleIncoming.timeZones.GMT).format('hh:mm A z') + '*';
@@ -209,16 +209,24 @@ handleIncoming.getAskTimeZones = function(questionString){
         subparts = questionString.split('in');
     }
     if(subparts.length > 1){
-        if(subparts[0].indexOf('est') >= 0 || subparts[0].indexOf('et') >= 0){
+        /* 
+        'IST' : 'Asia/Calcutta',
+        'EST' : 'America/New_York',
+        'CST' : 'America/Chicago',//Chicago
+        'MST' : 'America/Denver',//Denver
+        'PST' : 'America/Vancouver',//Los Angeles
+        'GMT' : 'Europe/London'//London
+        */
+        if(subparts[0].indexOf('est') >= 0 || subparts[0].indexOf('et') >= 0 || subparts[0].indexOf('edt') >= 0){
             handleIncoming.zone.from = 'EST';
         }
-        if(subparts[0].indexOf('cst') >= 0 || subparts[0].indexOf('ct') >= 0){
+        if(subparts[0].indexOf('cst') >= 0 || subparts[0].indexOf('ct') >= 0 || subparts[0].indexOf('cdt') >= 0){
             handleIncoming.zone.from = 'CST';
         }
-        if(subparts[0].indexOf('mst') >= 0 || subparts[0].indexOf('mt') >= 0){
+        if(subparts[0].indexOf('mst') >= 0 || subparts[0].indexOf('mt') >= 0 || subparts[0].indexOf('mdt') >= 0){
             handleIncoming.zone.from = 'MST';
         }
-        if(subparts[0].indexOf('pst') >= 0 || subparts[0].indexOf('pt') >= 0){
+        if(subparts[0].indexOf('pst') >= 0 || subparts[0].indexOf('pt') >= 0 || subparts[0].indexOf('pdt') >= 0){
             handleIncoming.zone.from = 'PST';
         }
         if(subparts[0].indexOf('ist') >= 0 ){
@@ -228,16 +236,16 @@ handleIncoming.getAskTimeZones = function(questionString){
             handleIncoming.zone.from = 'GMT';
         }
 
-        if(subparts[1].indexOf('est') >= 0 || subparts[1].indexOf('et') >= 0){
+        if(subparts[1].indexOf('est') >= 0 || subparts[1].indexOf('et') >= 0 || subparts[0].indexOf('edt') >= 0){
             handleIncoming.zone.to = 'EST';
         }
-        if(subparts[1].indexOf('cst') >= 0 || subparts[1].indexOf('ct') >= 0){
+        if(subparts[1].indexOf('cst') >= 0 || subparts[1].indexOf('ct') >= 0 || subparts[0].indexOf('cdt') >= 0){
             handleIncoming.zone.to = 'CST';
         }
-        if(subparts[1].indexOf('mst') >= 0 || subparts[1].indexOf('mt') >= 0){
+        if(subparts[1].indexOf('mst') >= 0 || subparts[1].indexOf('mt') >= 0 || subparts[0].indexOf('mdt') >= 0){
             handleIncoming.zone.to = 'MST';
         }
-        if(subparts[1].indexOf('pst') >= 0 || subparts[1].indexOf('pt') >= 0){
+        if(subparts[1].indexOf('pst') >= 0 || subparts[1].indexOf('pt' || subparts[0].indexOf('pdt') >= 0) >= 0){
             handleIncoming.zone.to = 'PST';
         }
         if(subparts[1].indexOf('ist') >= 0 ){
