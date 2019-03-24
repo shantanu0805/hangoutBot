@@ -127,6 +127,7 @@ handleIncoming.defaultReply = function(requestBody){
 handleIncoming.getTime = function(requestBody){
 
     var questionString = '';
+    handleIncoming.reset(); 
     try{
         //requestBody.type = 'MESSAGE';
         if(requestBody.type === 'ADDED_TO_SPACE'){
@@ -134,7 +135,6 @@ handleIncoming.getTime = function(requestBody){
         }
         if(requestBody.type === 'MESSAGE'){
             var date;
-            handleIncoming.reset(); 
             var returnObj = { text : ''};
             //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'};
             questionString = requestBody.message.text.toLowerCase();
