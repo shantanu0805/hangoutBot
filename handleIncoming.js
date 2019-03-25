@@ -107,12 +107,13 @@ handleIncoming.defaultReply = function(requestBody){
         'GMT' : 'Europe/London'//London
     */
     var returnObj = { text : '*Current Times:*'};
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.IST).format('hh:mm A z') + '(India)';
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.GMT).format('hh:mm A z') + '(London)';
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.EST).format('hh:mm A z') + '(Boston)';
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.CST).format('hh:mm A z') + '(Chicago)';
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.MST).format('hh:mm A z') + '(Denver)';
-    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.PST).format('hh:mm A z') + '(Los Angeles)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.IST).format('hh:mma z') + '(India)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.GMT).format('hh:mma z') + '(London)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.EST).format('hh:mma z') + '(Boston)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.CST).format('hh:mma z') + '(Chicago)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.MST).format('hh:mma z') + '(Denver)';
+    returnObj.text += '\n' + moment().tz(handleIncoming.timeZones.PST).format('hh:mma z') + '(Los Angeles)';
+    //console.log('>> returnObj.text : ' + returnObj.text); //Uncomment this for local test
 
     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
     handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
@@ -200,6 +201,7 @@ handleIncoming.getTime = function(requestBody){
     catch(err) {
         return handleIncoming.defaultReply(requestBody);
     }
+    //return handleIncoming.defaultReply(requestBody); //Uncomment this for local test
 }    
 
 handleIncoming.getAskTimeZones = function(questionString){
