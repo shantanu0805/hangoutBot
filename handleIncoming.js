@@ -140,9 +140,9 @@ handleIncoming.getTime = function(requestBody){
         if(requestBody.type === 'MESSAGE'){
             var date;
             var returnObj = { text : ''};
-            //requestBody.message = {text : 'what is 9:30 PM ET in India?'}; //Uncomment this for local test
+            //requestBody.message = {text : 'what is 9:30 PM ET in IST?'}; //Uncomment this for local test
             questionString = requestBody.message.text.toLowerCase();
-            console.log('>> questionString : ' + returnObj.text);
+            console.log('>> questionString : ' + requestBody.message.text);
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
                 return handleIncoming.defaultReply(requestBody);
             }
