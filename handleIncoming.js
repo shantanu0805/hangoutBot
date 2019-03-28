@@ -140,9 +140,9 @@ handleIncoming.getTime = function(requestBody){
         if(requestBody.type === 'MESSAGE'){
             var date;
             var returnObj = { text : ''};
-            //requestBody.message = {text : 'what is 9:30 AM MST in PSt?'}; //Uncomment this for local test
+            //requestBody.message = {text : 'what is 9:30 PM ET in India?'}; //Uncomment this for local test
             questionString = requestBody.message.text.toLowerCase();
-
+            console.log('>> questionString : ' + returnObj.text);
             if(questionString.indexOf('current time') >= 0 || questionString.length <5){
                 return handleIncoming.defaultReply(requestBody);
             }
@@ -173,13 +173,8 @@ handleIncoming.getTime = function(requestBody){
                     var userAskTime = moment.tz(time, handleIncoming.timeZones[handleIncoming.zone.from]);
                     console.log('>> userAskTime : ' + userAskTime.format('hh:mm A z'));
                     var userAnswerTime = userAskTime.clone().tz(handleIncoming.timeZones[handleIncoming.zone.to]);
-                    var fromTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.from]).format('z');
-                    var toTimeZoneAbbr = moment.tz(date, handleIncoming.timeZones[handleIncoming.zone.to]).format('z');
-                    var returnText = '';
-                    //returnText += userAskTime.format('hh:mm A z') + ' ' + fromTimeZoneAbbr + ' is : *' + userAnswerTime.format('hh:mm A z') + ' ' + toTimeZoneAbbr + '*';
-                    returnText += userAskTime.format('hh:mm A z') + ' is : *' + userAnswerTime.format('hh:mm A z') + '*';
-                    returnObj.text = returnText;
-                    console.log('>> returnText : ' + returnText);
+                    returnObj.text = handleIncoming.getFinalReturnString(userAskTime, userAnswerTime);
+                    console.log('>> returnObj.text : ' + returnObj.text);
 
                     handleIncoming.userQueryJSON.Timestamp = new Date().toISOString();
                     handleIncoming.userQueryJSON.QueryText = requestBody.message.text;
@@ -204,11 +199,25 @@ handleIncoming.getTime = function(requestBody){
     //return handleIncoming.defaultReply(requestBody); //Uncomment this for local test
 }    
 
+handleIncoming.getFinalReturnString = function(userAskTimeStamp, userAnswerTimeStamp){
+
+    console.log('>> userAskTimeStamp day : ' + userAskTimeStamp.format('llll'));
+    console.log('>> userAnswerTimeStamp day : ' + userAnswerTimeStamp.format('llll'));
+    let returnString = userAskTimeStamp.format('hh:mm A z') + ' is : *' + userAnswerTimeStamp.format('hh:mm A z') + '*';
+    let askDay = userAskTimeStamp.format('llll').split(',')[0];
+    let answerDay = userAnswerTimeStamp.format('llll').split(',')[0];
+    if(askDay !== answerDay){
+        returnString = askDay + ' ' + userAskTimeStamp.format('hh:mm A z') + ' is : *' + answerDay + ' ' +  userAnswerTimeStamp.format('hh:mm A z') + '*';
+    }
+    return returnString;
+}
+
+
 handleIncoming.getAskTimeZones = function(questionString){
 
     var subparts, askTimeZone;
     if(questionString.indexOf('in') >= 0 ){
-        subparts = questionString.split('in');
+        subparts = questionString.split(/in(.+)/);
     }
     if(subparts.length > 1){
         /* 
@@ -238,22 +247,22 @@ handleIncoming.getAskTimeZones = function(questionString){
             handleIncoming.zone.from = 'GMT';
         }
 
-        if(subparts[1].indexOf('est') >= 0 || subparts[1].indexOf('et') >= 0 || subparts[0].indexOf('edt') >= 0){
+        if(subparts[1].indexOf('est') >= 0 || subparts[1].indexOf('et') >= 0 || subparts[1].indexOf('edt') >= 0 || subparts[1].indexOf('ny') >= 0 || subparts[1].indexOf('newyork') >= 0 || subparts[1].indexOf('new york') >= 0 || subparts[1].indexOf('boston') >= 0 || subparts[1].indexOf('hoboken') >= 0){
             handleIncoming.zone.to = 'EST';
         }
-        if(subparts[1].indexOf('cst') >= 0 || subparts[1].indexOf('ct') >= 0 || subparts[0].indexOf('cdt') >= 0){
+        if(subparts[1].indexOf('cst') >= 0 || subparts[1].indexOf('ct') >= 0 || subparts[1].indexOf('cdt') >= 0 || subparts[1].indexOf('chicago') >= 0){
             handleIncoming.zone.to = 'CST';
         }
-        if(subparts[1].indexOf('mst') >= 0 || subparts[1].indexOf('mt') >= 0 || subparts[0].indexOf('mdt') >= 0){
+        if(subparts[1].indexOf('mst') >= 0 || subparts[1].indexOf('mt') >= 0 || subparts[1].indexOf('mdt') >= 0 || subparts[1].indexOf('denver') >= 0){
             handleIncoming.zone.to = 'MST';
         }
-        if(subparts[1].indexOf('pst') >= 0 || subparts[1].indexOf('pt' || subparts[0].indexOf('pdt') >= 0) >= 0){
+        if(subparts[1].indexOf('pst') >= 0 || subparts[1].indexOf('pdt') >= 0 || subparts[1].indexOf('pt') >= 0 || subparts[1].indexOf('los angeles') >= 0 || subparts[1].indexOf('losangeles') >= 0){
             handleIncoming.zone.to = 'PST';
         }
-        if(subparts[1].indexOf('ist') >= 0 ){
+        if(subparts[1].indexOf('ist') >= 0 || subparts[1].indexOf('india') >= 0 || subparts[1].indexOf('delhi') >= 0){
             handleIncoming.zone.to = 'IST';
         }
-        if(subparts[1].indexOf('gmt') >= 0 || subparts[1].indexOf('bst') >= 0 ){
+        if(subparts[1].indexOf('gmt') >= 0 || subparts[1].indexOf('bst') >= 0 || subparts[1].indexOf('london') >= 0 || subparts[1].indexOf('uk') >= 0){
             handleIncoming.zone.to = 'GMT';
         }
     }
