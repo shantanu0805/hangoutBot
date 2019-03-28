@@ -15,6 +15,13 @@ const pool = new Pool({
 
 dbhelper.insertUserQueryRequest = function (userQueryJSON) {
     console.log('>> insertUserQueryRequest : ' + JSON.stringify(userQueryJSON));
+    // the pool with emit an error on behalf of any idle clients
+    // it contains if a backend error or network partition happens
+    pool.on('error', (err, client) => {
+        console.error('Unexpected error on idle client', err)
+        process.exit(-1)
+    })
+
     pool.connect(function (err, client, done) {
         if (err) {
             console.log("Can not connect to the DB" + err);
@@ -22,7 +29,7 @@ dbhelper.insertUserQueryRequest = function (userQueryJSON) {
             client.query('INSERT INTO public."UserQueries"( "ServerTimestamp", "UserQueryText", "BotAnswer", "ApiRequestType", "HangoutUserName", "BotSuccess", "HangoutRoomName", "HangoutRoomOrDM") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
                 [userQueryJSON.Timestamp, userQueryJSON.QueryText, userQueryJSON.BotAnswer, userQueryJSON.RequestType, userQueryJSON.UserName, userQueryJSON.Success, userQueryJSON.RoomName, userQueryJSON.RoomOrDM],
                 function (err, result) {
-                    //done();
+                    done()
                     if (err) {
                         console.log('>> Error in inserting record in db : ' + err);
                     } else {
